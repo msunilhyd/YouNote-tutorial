@@ -9,6 +9,7 @@ const User = require('../models/user');
 router.post("/", async (req, res) => {
     
     const { username, password } = req.body;
+    console.log("username is = " + username);
     if (password.length < 6) {
         res.status(500).json({msg: "Password length must be greater than 6 characters."});
         return;
@@ -23,6 +24,7 @@ router.post("/", async (req, res) => {
     newUser
         .save()
         .then(user => {
+            console.log(username);
             jwt.sign({
                 username: newUser.username
             }, 'secret', (err, token) => {
@@ -51,7 +53,7 @@ router.post("/login", (req, res) => {
                 res.status(500).json({ msg: "Invalid password"});
             }
             jwt.sign({
-                username: newUser.username
+                username: user.username
             }, 'secret', (err, token) => {
                 if (err) throw err;
                 res.send({
